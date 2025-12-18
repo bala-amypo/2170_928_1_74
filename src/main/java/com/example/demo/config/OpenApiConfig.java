@@ -18,3 +18,5 @@ public class OpenApiConfig {
                 ));
         }
 }
+
+cd reactapp && npm i&&npm i canvas@latest && nvm use 16 &&npm start
