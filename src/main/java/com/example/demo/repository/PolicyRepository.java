@@ -8,4 +8,6 @@ import java.util.List;
 public interface PolicyRepository extends JpaRepository<Policy, Long> {
 
     List<Policy> findByUserId(Long userId);
+
+    boolean existsByPolicyNumber(String policyNumber);
 }
