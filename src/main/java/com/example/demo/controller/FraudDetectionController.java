@@ -1,28 +1,26 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.FraudRule;
-import com.example.demo.service.FraudRuleService;
+import com.example.demo.model.FraudCheckResult;
+import com.example.demo.service.FraudDetectionService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/rules")
-public class FraudRuleController {
+@RequestMapping("/api/fraud-check")
+public class FraudDetectionController {
 
-    private final FraudRuleService fraudRuleService;
+    private final FraudDetectionService fraudDetectionService;
 
-    public FraudRuleController(FraudRuleService fraudRuleService) {
-        this.fraudRuleService = fraudRuleService;
+    public FraudDetectionController(FraudDetectionService fraudDetectionService) {
+        this.fraudDetectionService = fraudDetectionService;
     }
 
-    @PostMapping
-    public FraudRule add(@RequestBody FraudRule rule) {
-        return fraudRuleService.addRule(rule);
+    @PostMapping("/evaluate/{claimId}")
+    public FraudCheckResult evaluate(@PathVariable Long claimId) {
+        return fraudDetectionService.evaluateClaim(claimId);
     }
 
-    @GetMapping
-    public List<FraudRule> all() {
-        return fraudRuleService.getAllRules();
+    @GetMapping("/result/claim/{claimId}")
+    public FraudCheckResult result(@PathVariable Long claimId) {
+        return fraudDetectionService.getResultByClaim(claimId);
     }
 }
