@@ -1,35 +1,26 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
-@Table(name = "claims")
 public class Claim {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Policy policy;
+    private Long policyId;
+    private Double amount;
 
-    private LocalDate claimDate;
-    private Double claimAmount;
-    private String description;
-    private String status = "PENDING";
-
-    public Claim() {}
-
-    public Claim(Policy policy, LocalDate claimDate,
-                 Double claimAmount, String description) {
-        this.policy = policy;
-        this.claimDate = claimDate;
-        this.claimAmount = claimAmount;
-        this.description = description;
+    public Long getId() {
+        return id;
     }
 
-    public void setPolicy(Policy policy) { this.policy = policy; }
-    public Double getClaimAmount() { return claimAmount; }
-    public LocalDate getClaimDate() { return claimDate; }
+    public Long getPolicyId() {
+        return policyId;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
 }
