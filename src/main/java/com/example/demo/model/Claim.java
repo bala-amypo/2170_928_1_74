@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class Claim {
@@ -9,18 +10,40 @@ public class Claim {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long policyId;
-    private Double amount;
+    private Double claimAmount;
+    private LocalDate claimDate;
+
+    @ManyToOne
+    private Policy policy;
+
+    public Claim() {
+    }
 
     public Long getId() {
         return id;
     }
 
-    public Long getPolicyId() {
-        return policyId;
+    public Double getClaimAmount() {
+        return claimAmount;
     }
 
-    public Double getAmount() {
-        return amount;
+    public void setClaimAmount(Double claimAmount) {
+        this.claimAmount = claimAmount;
+    }
+
+    public LocalDate getClaimDate() {
+        return claimDate;
+    }
+
+    public void setClaimDate(LocalDate claimDate) {
+        this.claimDate = claimDate;
+    }
+
+    public Policy getPolicy() {
+        return policy;
+    }
+
+    public void setPolicy(Policy policy) {
+        this.policy = policy;
     }
 }

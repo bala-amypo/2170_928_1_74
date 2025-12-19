@@ -10,7 +10,12 @@ public class FraudRule {
     private Long id;
 
     private String ruleName;
+    private String conditionField;
+    private String value;
     private String severity;
+
+    public FraudRule() {
+    }
 
     public Long getId() {
         return id;
@@ -18,6 +23,14 @@ public class FraudRule {
 
     public String getRuleName() {
         return ruleName;
+    }
+
+    public String getConditionField() {
+        return conditionField;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public String getSeverity() {
