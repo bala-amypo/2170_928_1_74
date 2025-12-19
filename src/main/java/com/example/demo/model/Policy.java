@@ -1,0 +1,39 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "policies")
+public class Policy {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    private User user;
+
+    @Column(unique = true)
+    private String policyNumber;
+
+    private String policyType;
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    public Policy() {}
+
+    public Policy(User user, String policyNumber, String policyType,
+                  LocalDate startDate, LocalDate endDate) {
+        this.user = user;
+        this.policyNumber = policyNumber;
+        this.policyType = policyType;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public void setUser(User user) { this.user = user; }
+    public String getPolicyNumber() { return policyNumber; }
+    public LocalDate getStartDate() { return startDate; }
+    public LocalDate getEndDate() { return endDate; }
+}
