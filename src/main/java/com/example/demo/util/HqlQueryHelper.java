@@ -1,21 +1,36 @@
 package com.example.demo.util;
 
+import com.example.demo.model.Claim;
+import com.example.demo.model.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
+import java.util.List;
 
 @Component
 public class HqlQueryHelper {
 
-    // Method to find claims above a certain amount
-    public String findHighValueClaims(double minAmount) {
-        return "FROM Claim c WHERE c.claimAmount > " + minAmount;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public List<Claim> findHighValueClaims(double minAmount) {
+        String hql = "FROM Claim c WHERE c.claimAmount > :minAmount";
+        return entityManager.createQuery(hql, Claim.class)
+                .setParameter("minAmount", minAmount)
+                .getResultList();
     }
 
-    // Method to search claims by description keyword
-    public String findClaimsByDescriptionKeyword(String keyword) {
-        return "FROM Claim c WHERE c.description LIKE '%" + keyword + "%'";
+    public List<Claim> findClaimsByDescriptionKeyword(String keyword) {
+        String hql = "FROM Claim c WHERE c.description LIKE :keyword";
+        return entityManager.createQuery(hql, Claim.class)
+                .setParameter("keyword", "%" + keyword + "%")
+                .getResultList();
     }
 
-    public String buildUserSearchQuery(String email) {
-        return "FROM User u WHERE u.email = '" + email + "'";
+    public List<User> buildUserSearchQuery(String email) {
+        String hql = "FROM User u WHERE u.email = :email";
+        return entityManager.createQuery(hql, User.class)
+                .setParameter("email", email)
+                .getResultList();
     }
 }
