@@ -14,7 +14,7 @@ public class FraudRule {
 
     public FraudRule() {}
 
-    // Add this constructor for the tests
+    // ADD THIS: Constructor required by tests
     public FraudRule(String ruleName, String conditionField, String operator, String value, String description) {
         this.ruleName = ruleName;
         this.conditionField = conditionField;
@@ -23,5 +23,5 @@ public class FraudRule {
         this.description = description;
     }
 
-    // ... Keep Getters/Setters ...
+    // Getters and Setters...
 }
