@@ -17,6 +17,10 @@ public class FraudCheckResult {
     private Boolean isFraudulent;
     private String triggeredRuleName;
     private String rejectionReason;
+
+    // ✅ REQUIRED BY TEST CASE (3NF SNAPSHOT)
+    private String matchedRules;
+
     private LocalDateTime checkedAt;
 
     public FraudCheckResult() {}
@@ -32,6 +36,13 @@ public class FraudCheckResult {
         this.checkedAt = checkedAt;
     }
 
+    @PrePersist
+    public void prePersist() {
+        this.checkedAt = LocalDateTime.now();
+    }
+
+    // ---------------- GETTERS & SETTERS ----------------
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -39,7 +50,9 @@ public class FraudCheckResult {
     public void setClaim(Claim claim) { this.claim = claim; }
 
     public Boolean getIsFraudulent() { return isFraudulent; }
-    public void setIsFraudulent(Boolean isFraudulent) { this.isFraudulent = isFraudulent; }
+    public void setIsFraudulent(Boolean isFraudulent) {
+        this.isFraudulent = isFraudulent;
+    }
 
     public String getTriggeredRuleName() { return triggeredRuleName; }
     public void setTriggeredRuleName(String triggeredRuleName) {
@@ -49,6 +62,15 @@ public class FraudCheckResult {
     public String getRejectionReason() { return rejectionReason; }
     public void setRejectionReason(String rejectionReason) {
         this.rejectionReason = rejectionReason;
+    }
+
+    // ✅ TEST-REQUIRED METHODS
+    public String getMatchedRules() {
+        return matchedRules;
+    }
+
+    public void setMatchedRules(String matchedRules) {
+        this.matchedRules = matchedRules;
     }
 
     public LocalDateTime getCheckedAt() { return checkedAt; }
