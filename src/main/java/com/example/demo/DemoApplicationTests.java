@@ -5,9 +5,11 @@ import com.example.demo.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class DemoApplicationTests {
 
     @Autowired
@@ -16,16 +18,19 @@ class DemoApplicationTests {
     private PolicyService policyService;
 
     @Test
-    void testWorkflow() {
+    void testPolicyCreationFlow() {
         User user = new User();
-        user.setEmail("test@test.com");
+        user.setEmail("tester@demo.com");
+        user.setPassword("pass");
         user = userService.registerUser(user);
 
         Policy policy = new Policy();
-        policy.setPolicyNumber("P100");
-        // We pass the USER ID and the POLICY object separately to match your Service
+        policy.setPolicyNumber("POL-999");
+        
+        // Matches required: java.lang.Long, com.example.demo.model.Policy
         Policy savedPolicy = policyService.createPolicy(user.getId(), policy); 
         
         assertNotNull(savedPolicy.getId());
+        assertEquals("POL-999", savedPolicy.getPolicyNumber());
     }
 }
