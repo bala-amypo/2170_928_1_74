@@ -7,7 +7,6 @@ import com.example.demo.repository.ClaimRepository;
 import com.example.demo.repository.PolicyRepository;
 import com.example.demo.service.ClaimService;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,25 +22,17 @@ public class ClaimServiceImpl implements ClaimService {
 
     @Override
     public Claim createClaim(Long policyId, Claim claim) {
-        // 1. Policy existence check
         Policy policy = policyRepository.findById(policyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Policy not found"));
-
-        // 2. Validation: Amount must be >= 0
-        if (claim.getClaimAmount() == null || claim.getClaimAmount() < 0) {
-            throw new IllegalArgumentException("invalid claim amount");
+        
+        if (claim.getClaimAmount() < 0) {
+            throw new IllegalArgumentException("Invalid claim amount");
         }
-
-        // 3. Validation: Date cannot be in the future
-        if (claim.getClaimDate() != null && claim.getClaimDate().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("invalid claim date");
-        }
-
-        claim.setPolicy(policy);
-        if (claim.getStatus() == null) {
-            claim.setStatus("PENDING");
+        if (claim.getClaimDate().isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Invalid claim date");
         }
         
+        claim.setPolicy(policy);
         return claimRepository.save(claim);
     }
 
