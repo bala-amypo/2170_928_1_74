@@ -11,12 +11,14 @@ public class Policy {
     private String policyType;
     private LocalDate startDate;
     private LocalDate endDate;
-    @ManyToOne @JoinColumn(name = "user_id")
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    public Policy() {} // Keep default
+    public Policy() {} // Required for JPA
 
-    // Add this constructor for the tests
+    // Required for Tests
     public Policy(User user, String policyNumber, String policyType, LocalDate startDate, LocalDate endDate) {
         this.user = user;
         this.policyNumber = policyNumber;
@@ -25,5 +27,5 @@ public class Policy {
         this.endDate = endDate;
     }
 
-    // ... Keep all existing Getters/Setters ...
+    // Getters and Setters ...
 }
