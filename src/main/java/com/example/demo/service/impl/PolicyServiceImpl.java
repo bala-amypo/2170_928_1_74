@@ -23,15 +23,15 @@ public class PolicyServiceImpl implements PolicyService {
     public Policy createPolicy(Long userId, Policy policy) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
+        
         if (policyRepository.existsByPolicyNumber(policy.getPolicyNumber())) {
-            throw new IllegalArgumentException("policy number already exists");
+            throw new IllegalArgumentException("Invalid policy number or already exists");
         }
-
+        
         if (policy.getEndDate().isBefore(policy.getStartDate())) {
-            throw new IllegalArgumentException("invalid dates");
+            throw new IllegalArgumentException("Invalid dates: end date must be after start date");
         }
-
+        
         policy.setUser(user);
         return policyRepository.save(policy);
     }
