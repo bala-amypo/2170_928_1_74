@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,7 +10,21 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     private String secretKey = "secret";
-    private long expirationMillis = 3600000;
+    private int expirationMillis = 3600000;
+
+    // Required by Tests: Constructor with arguments
+    public JwtUtil(String secretKey, int expirationMillis) {
+        this.secretKey = secretKey;
+        this.expirationMillis = expirationMillis;
+    }
+
+    // Default constructor for Spring
+    public JwtUtil() {}
+
+    // Required by Tests: Overloaded method that accepts a User object
+    public String generateToken(User user) {
+        return generateToken(user.getId(), user.getEmail(), user.getRole());
+    }
 
     public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
