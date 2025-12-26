@@ -32,4 +32,12 @@ public class FraudRule {
         this.value = value;
         this.severity = severity;
     }
+
+    // ✅ GETTERS
+    public Long getId() { return id; }
+    public String getRuleName() { return ruleName; }
+    public String getConditionField() { return conditionField; }
+    public String getOperator() { return operator; }
+    public String getValue() { return value; }
+    public String getSeverity() { return severity; }
 }
