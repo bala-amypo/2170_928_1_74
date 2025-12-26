@@ -1,27 +1,10 @@
-package com.example.demo.model;
+public FraudRule() {} // Keep default
 
-import jakarta.persistence.*;
-
-@Entity
-public class FraudRule {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String ruleName;
-    private String conditionField;
-    private String operator;
-    private String value;
-    private String description;
-
-    public FraudRule() {}
-
-    // ADD THIS: Constructor required by tests
-    public FraudRule(String ruleName, String conditionField, String operator, String value, String description) {
-        this.ruleName = ruleName;
-        this.conditionField = conditionField;
-        this.operator = operator;
-        this.value = value;
-        this.description = description;
-    }
-
-    // Getters and Setters...
+// Add this exact constructor for the tests
+public FraudRule(String ruleName, String conditionField, String operator, String value, String description) {
+    this.ruleName = ruleName;
+    this.conditionField = conditionField;
+    this.operator = operator;
+    this.value = value;
+    this.description = description;
 }
