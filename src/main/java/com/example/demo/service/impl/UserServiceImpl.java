@@ -21,9 +21,17 @@ public class UserServiceImpl implements UserService {
         if (repo.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Duplicate email");
         }
-        if (user.getRole() == null) user.setRole("USER");
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
         user.setPassword(encoder.encode(user.getPassword()));
         return repo.save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
