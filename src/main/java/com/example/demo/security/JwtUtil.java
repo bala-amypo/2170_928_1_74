@@ -1,21 +1,19 @@
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+
+import java.security.Key;
 import java.util.Date;
-import com.example.demo.model.User;
 
 public class JwtUtil {
 
-    private final String secret;
-    private final long expiration;
+    private final Key key;
+    private final long expirationMillis;
 
-    public JwtUtil(String secret, long expiration) {
-        this.secret = secret;
-        this.expiration = expiration;
-    }
-
-    public String generateToken(User user) {
-        return generateToken(user.getId(), user.getEmail(), user.getRole());
+    public JwtUtil(String secret, long expirationMillis) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expirationMillis = expirationMillis;
     }
 
     public String generateToken(Long userId, String email, String role) {
@@ -24,14 +22,19 @@ public class JwtUtil {
                 .claim("email", email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    // Overload used in tests
+    public String generateToken(com.example.demo.model.User user) {
+        return generateToken(user.getId(), user.getEmail(), user.getRole());
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
@@ -39,19 +42,11 @@ public class JwtUtil {
     }
 
     public String getEmailFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .get("email", String.class);
-    }
-
-    // 🔥 REQUIRED BY JwtAuthenticationFilter
-    public String getRoleFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody()
-                .get("role", String.class);
+                .getBody();
+        return claims.get("email", String.class);
     }
 }

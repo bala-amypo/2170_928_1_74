@@ -1,11 +1,11 @@
 package com.example.demo.util;
 
 import com.example.demo.model.Claim;
-import java.util.*;
+import java.util.List;
 
 public class HqlQueryHelper {
 
-    public List<Claim> findHighValueClaims(double minAmount) {
+    public List<Claim> findHighValueClaims(Double minAmount) {
         return List.of();
     }
 
