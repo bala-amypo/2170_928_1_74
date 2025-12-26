@@ -8,16 +8,12 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.PolicyService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class PolicyServiceImpl implements PolicyService {
-
     private final PolicyRepository policyRepository;
     private final UserRepository userRepository;
 
-    public PolicyServiceImpl(PolicyRepository policyRepository,
-                             UserRepository userRepository) {
+    public PolicyServiceImpl(PolicyRepository policyRepository, UserRepository userRepository) {
         this.policyRepository = policyRepository;
         this.userRepository = userRepository;
     }
@@ -28,25 +24,16 @@ public class PolicyServiceImpl implements PolicyService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if (policyRepository.existsByPolicyNumber(policy.getPolicyNumber())) {
-            throw new IllegalArgumentException("Policy number already exists");
+            throw new IllegalArgumentException("policy number already exists");
         }
 
-        if (!policy.getEndDate().isAfter(policy.getStartDate())) {
-            throw new IllegalArgumentException("Invalid policy dates");
+        if (policy.getEndDate().isBefore(policy.getStartDate()) || 
+            policy.getEndDate().isEqual(policy.getStartDate())) {
+            throw new IllegalArgumentException("invalid dates");
         }
 
         policy.setUser(user);
         return policyRepository.save(policy);
     }
-
-    @Override
-    public List<Policy> getPoliciesByUser(Long userId) {
-        return policyRepository.findByUserId(userId);
-    }
-
-    @Override
-    public Policy getPolicy(Long id) {
-        return policyRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Policy not found"));
-    }
+    // ... other methods (getPoliciesByUser, getPolicy)
 }

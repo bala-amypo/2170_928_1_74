@@ -13,30 +13,35 @@ import java.util.List;
 
 @Service
 public class ClaimServiceImpl implements ClaimService {
-
     private final ClaimRepository claimRepository;
     private final PolicyRepository policyRepository;
 
-    public ClaimServiceImpl(ClaimRepository claimRepository,
-                            PolicyRepository policyRepository) {
+    public ClaimServiceImpl(ClaimRepository claimRepository, PolicyRepository policyRepository) {
         this.claimRepository = claimRepository;
         this.policyRepository = policyRepository;
     }
 
     @Override
     public Claim createClaim(Long policyId, Claim claim) {
+        // 1. Policy existence check
         Policy policy = policyRepository.findById(policyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Policy not found"));
 
-        if (claim.getClaimAmount() < 0) {
-            throw new IllegalArgumentException("Invalid claim amount");
+        // 2. Validation: Amount must be >= 0
+        if (claim.getClaimAmount() == null || claim.getClaimAmount() < 0) {
+            throw new IllegalArgumentException("invalid claim amount");
         }
 
-        if (claim.getClaimDate().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Invalid claim date");
+        // 3. Validation: Date cannot be in the future
+        if (claim.getClaimDate() != null && claim.getClaimDate().isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("invalid claim date");
         }
 
         claim.setPolicy(policy);
+        if (claim.getStatus() == null) {
+            claim.setStatus("PENDING");
+        }
+        
         return claimRepository.save(claim);
     }
 
