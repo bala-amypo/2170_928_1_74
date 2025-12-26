@@ -4,7 +4,7 @@ import com.example.demo.model.FraudRule;
 import com.example.demo.repository.FraudRuleRepository;
 import com.example.demo.service.FraudRuleService;
 
-import java.util.*;
+import java.util.List;
 
 public class FraudRuleServiceImpl implements FraudRuleService {
 
@@ -14,16 +14,20 @@ public class FraudRuleServiceImpl implements FraudRuleService {
         this.repo = repo;
     }
 
+    @Override
     public FraudRule addRule(FraudRule rule) {
-        if (repo.findByRuleName(rule.getRuleName()).isPresent())
-            throw new IllegalArgumentException("Invalid or duplicate rule name");
+        if (repo.findByRuleName(rule.getRuleName()).isPresent()) {
+            throw new IllegalArgumentException("Duplicate rule name");
+        }
 
-        if (!Set.of("LOW", "MEDIUM", "HIGH").contains(rule.getSeverity()))
+        if (!rule.getSeverity().matches("LOW|MEDIUM|HIGH")) {
             throw new IllegalArgumentException("Invalid severity");
+        }
 
         return repo.save(rule);
     }
 
+    @Override
     public List<FraudRule> getAllRules() {
         return repo.findAll();
     }

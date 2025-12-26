@@ -1,11 +1,11 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Claim;
 import com.example.demo.model.Policy;
 import com.example.demo.repository.ClaimRepository;
 import com.example.demo.repository.PolicyRepository;
 import com.example.demo.service.ClaimService;
-import com.example.demo.exception.ResourceNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,8 +38,8 @@ public class ClaimServiceImpl implements ClaimService {
     }
 
     @Override
-    public Claim getClaim(Long claimId) {
-        return claimRepo.findById(claimId)
+    public Claim getClaim(Long id) {
+        return claimRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Claim not found"));
     }
 

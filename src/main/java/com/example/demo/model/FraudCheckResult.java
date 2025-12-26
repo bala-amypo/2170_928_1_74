@@ -19,9 +19,6 @@ public class FraudCheckResult {
     private String rejectionReason;
     private LocalDateTime checkedAt;
 
-    // REQUIRED BY TEST
-    private String matchedRules;
-
     public FraudCheckResult() {}
 
     public FraudCheckResult(Claim claim, Boolean isFraudulent,
@@ -40,11 +37,5 @@ public class FraudCheckResult {
         this.checkedAt = LocalDateTime.now();
     }
 
-    public void setMatchedRules(String matchedRules) {
-        this.matchedRules = matchedRules;
-    }
-
-    public String getMatchedRules() {
-        return matchedRules;
-    }
+    // getters and setters
 }

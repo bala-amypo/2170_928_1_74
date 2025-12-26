@@ -1,7 +1,8 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "fraud_rules")
@@ -33,10 +34,5 @@ public class FraudRule {
         this.severity = severity;
     }
 
-    public String getRuleName() { return ruleName; }
-    public String getSeverity() { return severity; }
-
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
-    public void setClaims(Set<Claim> claims) { this.claims = claims; }
-    public Set<Claim> getClaims() { return claims; }
+    // getters and setters
 }

@@ -1,12 +1,12 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.FraudDetectionService;
-import com.example.demo.exception.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 public class FraudDetectionServiceImpl implements FraudDetectionService {
 
@@ -15,24 +15,44 @@ public class FraudDetectionServiceImpl implements FraudDetectionService {
     private final FraudCheckResultRepository resultRepo;
 
     public FraudDetectionServiceImpl(
-            ClaimRepository c,
-            FraudRuleRepository r,
-            FraudCheckResultRepository res) {
-        this.claimRepo = c;
-        this.ruleRepo = r;
-        this.resultRepo = res;
+            ClaimRepository claimRepo,
+            FraudRuleRepository ruleRepo,
+            FraudCheckResultRepository resultRepo) {
+        this.claimRepo = claimRepo;
+        this.ruleRepo = ruleRepo;
+        this.resultRepo = resultRepo;
     }
 
+    @Override
     public FraudCheckResult evaluateClaim(Long claimId) {
         Claim claim = claimRepo.findById(claimId)
                 .orElseThrow(() -> new ResourceNotFoundException("Claim not found"));
 
-        FraudCheckResult result = new FraudCheckResult();
-        result.setMatchedRules("");
-        resultRepo.save(result);
-        return result;
+        List<FraudRule> rules = ruleRepo.findAll();
+
+        for (FraudRule rule : rules) {
+            if ("claimAmount".equals(rule.getConditionField())) {
+                double threshold = Double.parseDouble(rule.getValue());
+                if (claim.getClaimAmount() > threshold) {
+                    FraudCheckResult result = new FraudCheckResult(
+                            claim,
+                            true,
+                            rule.getRuleName(),
+                            "Claim exceeds threshold",
+                            LocalDateTime.now()
+                    );
+                    return resultRepo.save(result);
+                }
+            }
+        }
+
+        FraudCheckResult clean = new FraudCheckResult(
+                claim, false, null, null, LocalDateTime.now()
+        );
+        return resultRepo.save(clean);
     }
 
+    @Override
     public FraudCheckResult getResultByClaim(Long claimId) {
         return resultRepo.findByClaimId(claimId)
                 .orElseThrow(() -> new ResourceNotFoundException("Result not found"));
