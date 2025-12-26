@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,7 +12,12 @@ public class Claim {
     private Long id;
     
     private String description;
-    private double amount;
+    private Double claimAmount; // Matches getClaimAmount()
+    private LocalDate claimDate; // Matches getClaimDate()
+    private String status;       // Matches getStatus()
+
+    @ManyToOne
+    private Policy policy;       // Matches getPolicy()
 
     @ManyToMany
     @JoinTable(
@@ -26,8 +32,14 @@ public class Claim {
     public void setId(Long id) { this.id = id; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    public double getAmount() { return amount; }
-    public void setAmount(double amount) { this.amount = amount; }
+    public Double getClaimAmount() { return claimAmount; }
+    public void setClaimAmount(Double claimAmount) { this.claimAmount = claimAmount; }
+    public LocalDate getClaimDate() { return claimDate; }
+    public void setClaimDate(LocalDate claimDate) { this.claimDate = claimDate; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+    public Policy getPolicy() { return policy; }
+    public void setPolicy(Policy policy) { this.policy = policy; }
     public Set<FraudRule> getSuspectedRules() { return suspectedRules; }
     public void setSuspectedRules(Set<FraudRule> suspectedRules) { this.suspectedRules = suspectedRules; }
 }
