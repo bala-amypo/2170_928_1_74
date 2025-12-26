@@ -1,42 +1,17 @@
-package com.example.demo.model;
+package com.example.demo.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "fraud_check_results")
-public class FraudCheckResult {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @OneToOne @JoinColumn(name = "claim_id")
-    private Claim claim;
-
+public class FraudCheckResultDto { // Changed from FraudCheckResult to FraudCheckResultDto
+    private Long claimId;
     private Boolean isFraudulent;
     private String triggeredRuleName;
     private String rejectionReason;
     private LocalDateTime checkedAt;
 
-    public FraudCheckResult() {}
-
-    public FraudCheckResult(Claim claim, Boolean isFraudulent, String triggeredRuleName, String rejectionReason, LocalDateTime checkedAt) {
-        this.claim = claim;
-        this.isFraudulent = isFraudulent;
-        this.triggeredRuleName = triggeredRuleName;
-        this.rejectionReason = rejectionReason;
-        this.checkedAt = checkedAt;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.checkedAt = LocalDateTime.now();
-    }
-
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Claim getClaim() { return claim; }
-    public void setClaim(Claim claim) { this.claim = claim; }
+    public Long getClaimId() { return claimId; }
+    public void setClaimId(Long claimId) { this.claimId = claimId; }
     public Boolean getIsFraudulent() { return isFraudulent; }
     public void setIsFraudulent(Boolean isFraudulent) { this.isFraudulent = isFraudulent; }
     public String getTriggeredRuleName() { return triggeredRuleName; }
