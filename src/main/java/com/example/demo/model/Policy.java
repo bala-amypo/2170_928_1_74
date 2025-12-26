@@ -4,43 +4,31 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "policies")
 public class Policy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String policyNumber;
-    private LocalDate startDate;
-    private LocalDate endDate;
-
     @ManyToOne
     private User user;
 
-    public Policy() {
-    }
+    @Column(unique = true)
+    private String policyNumber;
 
-    public Long getId() {
-        return id;
-    }
+    private String policyType;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-    public String getPolicyNumber() {
-        return policyNumber;
-    }
+    public Policy() {}
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
+    public Policy(User user, String policyNumber, String policyType,
+                  LocalDate startDate, LocalDate endDate) {
         this.user = user;
+        this.policyNumber = policyNumber;
+        this.policyType = policyType;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }

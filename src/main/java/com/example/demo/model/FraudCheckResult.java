@@ -4,46 +4,35 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "fraud_check_results")
 public class FraudCheckResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     private Claim claim;
 
-    private boolean fraudDetected;
-    private String ruleName;
-    private String severity;
+    private Boolean isFraudulent;
+    private String triggeredRuleName;
+    private String rejectionReason;
     private LocalDateTime checkedAt;
 
-    public FraudCheckResult() {
+    @PrePersist
+    void onCreate() {
+        checkedAt = LocalDateTime.now();
     }
 
-    public FraudCheckResult(
-            Claim claim,
-            boolean fraudDetected,
-            String ruleName,
-            String severity,
+    public FraudCheckResult() {}
+
+    public FraudCheckResult(Claim claim, Boolean isFraudulent,
+            String triggeredRuleName, String rejectionReason,
             LocalDateTime checkedAt) {
-
         this.claim = claim;
-        this.fraudDetected = fraudDetected;
-        this.ruleName = ruleName;
-        this.severity = severity;
+        this.isFraudulent = isFraudulent;
+        this.triggeredRuleName = triggeredRuleName;
+        this.rejectionReason = rejectionReason;
         this.checkedAt = checkedAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Claim getClaim() {
-        return claim;
-    }
-
-    public boolean isFraudDetected() {
-        return fraudDetected;
     }
 }

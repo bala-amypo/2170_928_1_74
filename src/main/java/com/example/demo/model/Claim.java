@@ -2,48 +2,37 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.*;
 
 @Entity
+@Table(name = "claims")
 public class Claim {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double claimAmount;
-    private LocalDate claimDate;
-
     @ManyToOne
     private Policy policy;
 
-    public Claim() {
-    }
+    private LocalDate claimDate;
+    private Double claimAmount;
+    private String description;
+    private String status = "PENDING";
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToMany
+    private Set<FraudRule> suspectedRules = new HashSet<>();
 
-    public Double getClaimAmount() {
-        return claimAmount;
-    }
+    @OneToOne(mappedBy = "claim")
+    private FraudCheckResult fraudCheckResult;
 
-    public void setClaimAmount(Double claimAmount) {
-        this.claimAmount = claimAmount;
-    }
+    public Claim() {}
 
-    public LocalDate getClaimDate() {
-        return claimDate;
-    }
-
-    public void setClaimDate(LocalDate claimDate) {
-        this.claimDate = claimDate;
-    }
-
-    public Policy getPolicy() {
-        return policy;
-    }
-
-    public void setPolicy(Policy policy) {
+    public Claim(Policy policy, LocalDate claimDate,
+                 Double claimAmount, String description) {
         this.policy = policy;
+        this.claimDate = claimDate;
+        this.claimAmount = claimAmount;
+        this.description = description;
     }
 }
