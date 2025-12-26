@@ -1,7 +1,6 @@
-public Policy() {} // Keep default
+public Policy() {} // Required for JPA
 
-// Add this exact constructor for the tests
-public Policy(User user, String policyNumber, String policyType, java.time.LocalDate startDate, java.time.LocalDate endDate) {
+public Policy(User user, String policyNumber, String policyType, LocalDate startDate, LocalDate endDate) {
     this.user = user;
     this.policyNumber = policyNumber;
     this.policyType = policyType;

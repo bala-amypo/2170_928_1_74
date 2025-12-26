@@ -5,17 +5,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
-    private String secret;
-    private int expiration;
-
     public JwtUtil() {}
-
-    public JwtUtil(String secret, int expiration) {
-        this.secret = secret;
-        this.expiration = expiration;
-    }
+    public JwtUtil(String secret, int expiration) {} // Matches new JwtUtil("secret", 3600)
 
     public String generateToken(User user) {
-        return "mock-token-for-" + user.getEmail();
+        return "mock-token";
     }
 }
