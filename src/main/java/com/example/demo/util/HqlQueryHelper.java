@@ -23,4 +23,4 @@ public class HqlQueryHelper {
                 .setParameter("keyword", "%" + keyword + "%")
                 .getResultList();
     }
-}
+}av
