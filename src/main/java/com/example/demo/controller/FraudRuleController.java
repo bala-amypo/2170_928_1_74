@@ -10,19 +10,19 @@ import java.util.List;
 @RequestMapping("/api/rules")
 public class FraudRuleController {
 
-    private final FraudRuleService fraudRuleService;
+    private final FraudRuleService service;
 
-    public FraudRuleController(FraudRuleService fraudRuleService) {
-        this.fraudRuleService = fraudRuleService;
+    public FraudRuleController(FraudRuleService service) {
+        this.service = service;
     }
 
     @PostMapping
     public FraudRule add(@RequestBody FraudRule rule) {
-        return fraudRuleService.addRule(rule);
+        return service.addRule(rule);
     }
 
     @GetMapping
-    public List<FraudRule> all() {
-        return fraudRuleService.getAllRules();
+    public List<FraudRule> getAll() {
+        return service.getAllRules();
     }
 }

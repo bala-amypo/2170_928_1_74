@@ -10,20 +10,20 @@ import java.util.List;
 @RequestMapping("/api/policies")
 public class PolicyController {
 
-    private final PolicyService policyService;
+    private final PolicyService service;
 
-    public PolicyController(PolicyService policyService) {
-        this.policyService = policyService;
+    public PolicyController(PolicyService service) {
+        this.service = service;
     }
 
     @PostMapping("/{userId}")
     public Policy create(@PathVariable Long userId,
                          @RequestBody Policy policy) {
-        return policyService.createPolicy(userId, policy);
+        return service.createPolicy(userId, policy);
     }
 
     @GetMapping("/user/{userId}")
     public List<Policy> getByUser(@PathVariable Long userId) {
-        return policyService.getPoliciesByUser(userId);
+        return service.getPoliciesByUser(userId);
     }
 }
