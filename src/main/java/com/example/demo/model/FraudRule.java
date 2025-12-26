@@ -13,12 +13,16 @@ public class FraudRule {
     private Long id;
 
     private String ruleName;
-
     private String description;
-
     private Double threshold;
 
-    // 🔴 REQUIRED FOR TEST CASES
+    // 🔴 REQUIRED BY SERVICES
+    private String conditionField;   // ex: "amount"
+    private String operator;         // ex: ">"
+    private Double value;             // ex: 50000
+    private String severity;          // ex: HIGH, MEDIUM, LOW
+
+    // 🔴 REQUIRED BY TEST CASES
     @ManyToMany
     @JoinTable(
         name = "fraudrule_claims",
@@ -27,7 +31,7 @@ public class FraudRule {
     )
     private Set<Claim> claims = new HashSet<>();
 
-    // ===== Getters and Setters =====
+    // ===== Getters & Setters =====
 
     public Long getId() {
         return id;
@@ -61,12 +65,4 @@ public class FraudRule {
         this.threshold = threshold;
     }
 
-    // 🔴 THESE TWO METHODS FIX YOUR ERROR
-    public Set<Claim> getClaims() {
-        return claims;
-    }
-
-    public void setClaims(Set<Claim> claims) {
-        this.claims = claims;
-    }
-}
+    // 🔴 SERVICE METHODS (FIX
