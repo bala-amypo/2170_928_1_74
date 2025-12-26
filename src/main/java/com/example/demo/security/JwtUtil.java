@@ -18,9 +18,9 @@ public class JwtUtil {
         return generateToken(user.getId(), user.getEmail(), user.getRole());
     }
 
-    public String generateToken(Long id, String email, String role) {
+    public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
-                .claim("userId", id)
+                .claim("userId", userId)
                 .claim("email", email)
                 .claim("role", role)
                 .setIssuedAt(new Date())
@@ -44,5 +44,14 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("email", String.class);
+    }
+
+    // 🔥 REQUIRED BY JwtAuthenticationFilter
+    public String getRoleFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
 }

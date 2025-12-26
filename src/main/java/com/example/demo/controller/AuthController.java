@@ -5,7 +5,7 @@ import com.example.demo.dto.AuthResponse;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,25 +17,48 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AuthController(
+            UserService userService,
+            PasswordEncoder passwordEncoder,
+            JwtUtil jwtUtil
+    ) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
 
+    // ================= REGISTER =================
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AuthRequest request) {
-        User user = new User(request.getName(), request.getEmail(), request.getPassword(), null);
-        return ResponseEntity.ok(userService.registerUser(user));
+    public User register(@RequestBody AuthRequest request) {
+
+        User user = new User(
+                request.getName(),
+                request.getEmail(),
+                request.getPassword(),
+                null
+        );
+
+        // ✅ CORRECT METHOD NAME
+        return userService.register(user);
     }
 
+    // ================= LOGIN =================
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+    public AuthResponse login(@RequestBody AuthRequest request) {
+
         User user = userService.findByEmail(request.getEmail());
-        if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
-            return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getRole()));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Invalid credentials");
         }
-        throw new IllegalArgumentException("Invalid email or password");
+
+        String token = jwtUtil.generateToken(user);
+
+        return new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 }
