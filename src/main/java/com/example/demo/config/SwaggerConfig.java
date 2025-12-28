@@ -11,12 +11,20 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
+                // 🔥 ADD YOUR PORTAL URL HERE
+                .addServersItem(new Server()
+                        .url("https://9184.408procr.amypo.ai")
+                        .description("Public Portal Server"))
+
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
+
+                .addSecurityItem(
+                        new SecurityRequirement().addList("bearerAuth")
+                );
     }
 }
