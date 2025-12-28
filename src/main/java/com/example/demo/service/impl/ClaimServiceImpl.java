@@ -7,6 +7,7 @@ import com.example.demo.repository.PolicyRepository;
 import com.example.demo.service.ClaimService;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ClaimServiceImpl implements ClaimService {
@@ -37,5 +38,10 @@ public class ClaimServiceImpl implements ClaimService {
     @Override
     public Claim getClaim(Long id) {
         return claimRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Claim> getAllClaims() {
+        return claimRepository.findAll();
     }
 }

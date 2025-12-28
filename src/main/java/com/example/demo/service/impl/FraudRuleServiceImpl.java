@@ -4,6 +4,7 @@ import com.example.demo.model.FraudRule;
 import com.example.demo.repository.FraudRuleRepository;
 import com.example.demo.service.FraudRuleService;
 import org.springframework.stereotype.Service;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -21,5 +22,10 @@ public class FraudRuleServiceImpl implements FraudRuleService {
             throw new IllegalArgumentException("Invalid severity");
         }
         return fraudRuleRepository.save(rule);
+    }
+
+    @Override
+    public List<FraudRule> getAllRules() {
+        return fraudRuleRepository.findAll();
     }
 }
