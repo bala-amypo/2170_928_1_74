@@ -1,9 +1,10 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Insurance Fraud Pattern Detector Suite">
-    <test name="All Tests">
+
+    <test name="All Test Cases">
         <packages>
             <package name="com.example.demo"/>
         </packages>
     </test>
+
 </suite>
-x

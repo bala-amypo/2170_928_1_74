@@ -11,9 +11,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Insurance Fraud Pattern Detector</name>
 
-    <!-- ===================== -->
-    <!-- PROPERTIES -->
-    <!-- ===================== -->
     <properties>
         <java.version>17</java.version>
         <spring.boot.version>3.2.0</spring.boot.version>
@@ -21,9 +18,6 @@
         <jjwt.version>0.11.5</jjwt.version>
     </properties>
 
-    <!-- ===================== -->
-    <!-- DEPENDENCY MANAGEMENT -->
-    <!-- ===================== -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -36,30 +30,25 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- ===================== -->
-    <!-- DEPENDENCIES -->
-    <!-- ===================== -->
     <dependencies>
 
-        <!-- Spring Boot Web -->
+        <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Spring Data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Spring Security (CRITICAL) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- JWT (CRITICAL) -->
+        <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -102,7 +91,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Boot Test (JUnit removed) -->
+        <!-- Spring Boot Test (JUnit EXCLUDED) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -113,21 +102,18 @@
                     <artifactId>junit-jupiter</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-launcher</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
 
     </dependencies>
 
-    <!-- ===================== -->
-    <!-- BUILD -->
-    <!-- ===================== -->
     <build>
         <plugins>
 
-            <!-- JAVA 17 -->
+            <!-- Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -138,23 +124,25 @@
                 </configuration>
             </plugin>
 
-            <!-- SPRING BOOT -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
-            </plugin>
-
-            <!-- TESTNG -->
+            <!-- FORCE TESTNG -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
                 <configuration>
+                    <useModulePath>false</useModulePath>
+                    <testNGArtifactName>org.testng:testng</testNGArtifactName>
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
+            </plugin>
+
+            <!-- Spring Boot -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
             </plugin>
 
         </plugins>
