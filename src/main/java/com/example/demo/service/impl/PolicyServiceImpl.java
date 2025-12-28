@@ -1,49 +1,41 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Policy;
 import com.example.demo.model.User;
 import com.example.demo.repository.PolicyRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.PolicyService;
-
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Service
 public class PolicyServiceImpl implements PolicyService {
+    private final PolicyRepository policyRepository;
+    private final UserRepository userRepository;
 
-    private final PolicyRepository policyRepo;
-    private final UserRepository userRepo;
-
-    public PolicyServiceImpl(PolicyRepository policyRepo, UserRepository userRepo) {
-        this.policyRepo = policyRepo;
-        this.userRepo = userRepo;
+    public PolicyServiceImpl(PolicyRepository policyRepository, UserRepository userRepository) {
+        this.policyRepository = policyRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public Policy createPolicy(Long userId, Policy policy) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        if (policyRepo.existsByPolicyNumber(policy.getPolicyNumber())) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            
+        if (policyRepository.existsByPolicyNumber(policy.getPolicyNumber())) {
             throw new IllegalArgumentException("Policy number already exists");
         }
-
-        if (!policy.getEndDate().isAfter(policy.getStartDate())) {
-            throw new IllegalArgumentException("Invalid policy dates");
+        if (policy.getEndDate().isBefore(policy.getStartDate())) {
+            throw new IllegalArgumentException("Invalid dates");
         }
-
+        
         policy.setUser(user);
-        return policyRepo.save(policy);
+        return policyRepository.save(policy);
     }
 
     @Override
     public List<Policy> getPoliciesByUser(Long userId) {
-        return policyRepo.findByUserId(userId);
-    }
-
-    @Override
-    public Policy getPolicy(Long id) {
-        return policyRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Policy not found"));
+        return policyRepository.findByUserId(userId);
     }
 }
