@@ -3,32 +3,23 @@ package com.example.demo.service.impl;
 import com.example.demo.model.FraudRule;
 import com.example.demo.repository.FraudRuleRepository;
 import com.example.demo.service.FraudRuleService;
+import org.springframework.stereotype.Service;
+import java.util.Set;
 
-import java.util.List;
-
+@Service
 public class FraudRuleServiceImpl implements FraudRuleService {
+    private final FraudRuleRepository fraudRuleRepository;
 
-    private final FraudRuleRepository repo;
-
-    public FraudRuleServiceImpl(FraudRuleRepository repo) {
-        this.repo = repo;
+    public FraudRuleServiceImpl(FraudRuleRepository fraudRuleRepository) {
+        this.fraudRuleRepository = fraudRuleRepository;
     }
 
     @Override
     public FraudRule addRule(FraudRule rule) {
-        if (repo.findByRuleName(rule.getRuleName()).isPresent()) {
-            throw new IllegalArgumentException("Duplicate rule name");
-        }
-
-        if (!rule.getSeverity().matches("LOW|MEDIUM|HIGH")) {
+        Set<String> validLevels = Set.of("HIGH", "MEDIUM", "LOW");
+        if (!validLevels.contains(rule.getSeverity())) {
             throw new IllegalArgumentException("Invalid severity");
         }
-
-        return repo.save(rule);
-    }
-
-    @Override
-    public List<FraudRule> getAllRules() {
-        return repo.findAll();
+        return fraudRuleRepository.save(rule);
     }
 }
